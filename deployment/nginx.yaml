@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3  # 副本数量，可以根据需要调整
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest  # 使用最新版本的 NGINX 镜像
+          ports:
+            - containerPort: 80  # 暴露端口 80
+          resources:           # 可选：设置资源限制
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80       # 服务暴露的端口
+      targetPort: 80 # 目标容器端口
+  type: ClusterIP    # 服务类型，可以根据需要调整为 NodePort 或 LoadBalancer
