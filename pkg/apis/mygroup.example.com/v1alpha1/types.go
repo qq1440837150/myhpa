@@ -1,5 +1,3 @@
-// pkg/apis/mygroup.example.com/v1alpha1/doc.go
-// +k8s:deepcopy-gen=package
 package v1alpha1
 
 import (
@@ -7,15 +5,19 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MyResource struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 	Spec              MyResourceSpec `json:"spec"`
 }
+
 type MyResourceSpec struct {
 	Image  string            `json:"image"`
 	Memory resource.Quantity `json:"memory"`
 }
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 type MyResourceList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
