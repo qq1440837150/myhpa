@@ -11,7 +11,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
-	"time"
 )
 
 type Func func(context.Context, reconcile.Request) (reconcile.Result, error)
@@ -37,11 +36,7 @@ func main() {
 	}
 	var myFunc Func = func(c context.Context, r reconcile.Request) (reconcile.Result, error) {
 		println("接受deployment")
-		println(r.Namespace)
-		println(r.Name)
-		if r.Namespace == "default" {
-			return reconcile.Result{RequeueAfter: time.Second * 5}, nil
-		}
+
 		return reconcile.Result{}, nil
 	}
 	hpaController, err := controller.New(
