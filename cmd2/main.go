@@ -2,7 +2,8 @@ package main
 
 import (
 	"context"
-	v1 "k8s.io/api/apps/v1"
+	"gitlab.zhf.cn/myhpa_controller/pkg/apis/mygroup.example.com/v1alpha1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"log"
 	"sigs.k8s.io/controller-runtime/pkg/client/config"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
@@ -20,9 +21,16 @@ func (r Func) Reconcile(ctx context.Context, o reconcile.Request) (reconcile.Res
 }
 func main() {
 	println("sss")
+	scheme := runtime.NewScheme()
+	err := v1alpha1.AddToScheme(scheme)
+	if err != nil {
+		return
+	}
 	mgr, err := manager.New(
 		config.GetConfigOrDie(),
-		manager.Options{},
+		manager.Options{
+			Scheme: scheme,
+		},
 	)
 	if err != nil {
 		log.Fatalf("unable to set up overall controller manager: %v", err)
@@ -47,7 +55,7 @@ func main() {
 	// 监控 Deployment 资源
 	err = hpaController.Watch(
 		&source.Kind{
-			Type: &v1.Deployment{},
+			Type: &v1alpha1.MyResource{},
 		},
 		&handler.EnqueueRequestForObject{},
 	)
