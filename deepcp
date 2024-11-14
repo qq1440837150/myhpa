@@ -1,0 +1,13 @@
+deepcopy-gen --input-dirs gitlab.zhf.cn/myhpa_controller/pkg/apis/mygroup.example.com/v1alpha1\
+     -o zz_generated.deepcopy\
+     --output-base ./ \
+     --go-header-file ./hack/boilerplate.go.txt
+
+
+     client-gen \
+          --clientset-name clientset \
+          --input-base "" \
+          --input gitlab.zhf.cn/myhpa_controller/pkg/apis/mygroup.example.com/v1alpha1 \
+          --output-package gitlab.zhf.cn/myhpa_controller/pkg/clientset \
+          --output-base ./ \
+          --go-header-file hack/boilerplate.go.txt
